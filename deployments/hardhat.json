@@ -1,0 +1,17 @@
+{
+  "network": "hardhat",
+  "chainId": "31337",
+  "AIToken": "0x18fbD95309A955EF80ea4838eF58a41fD9d3FF7E",
+  "Treasury": "0xa3496FEab214287aF983f55B79869a1083385d82",
+  "Guardrail": "0x6F7E22e8Ed9da92223DBaA047cd6D4ceCbac8875",
+  "AIIdentityRegistry": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+  "StakingPool": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+  "AIBank": "0xad6Fda1FF0a8F57dA6cAACF7911c6E1d369CeF9a",
+  "InternalMarket": "0x7821F36e527DCfb367a09A799eC0F8175D63B786",
+  "DualPoolVault": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+  "TaskMarket": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+  "AI_Economist_Controller": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+  "teeAuthority": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "admin": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "humanDividendRecipient": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+}

@@ -1,0 +1,69 @@
+# AIDE 准生产 CI：Rust 引擎 + Hardhat 合约 + 集成审计（mainnet:check）
+name: AIDE CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  rust:
+    name: Rust Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt -- --check
+      - run: cargo check
+      - run: cargo test
+
+  hardhat:
+    name: Hardhat Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx hardhat compile
+      - run: npx hardhat test
+
+  slither:
+    name: Slither (static analysis)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install slither-analyzer
+      - run: npm ci
+      - run: npx hardhat compile
+      - name: Run Slither
+        run: slither . --exclude-dependencies --filter-paths "contracts/mocks"
+
+  integrated-audit:
+    name: Integrated Audit (mainnet:check)
+    runs-on: ubuntu-latest
+    needs: [rust, hardhat, slither]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm ci
+      - run: npm run mainnet:check

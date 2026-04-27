@@ -1,0 +1,55 @@
+# AI Decentralized Autonomous Economy (AIDE) - Project Rules
+
+## 0. 法律与逻辑基座 (Legal Foundation)
+- **最高准则**：本项目所有代码逻辑必须严格遵守 `@LAW_OF_AIDE.md`。
+- **冲突处理**：若生成的代码逻辑与法律文件冲突（如：允许了非法提现或漏掉了交易抽税），Cursor 必须自动重写。
+- **强制上下文**：在处理 `@Contracts` 或 `@Engine` 模块时，默认读取法律文件中关于“双池隔离”和“动态抽税”的条款。
+- **技术蓝图引用**：所有模块实现必须参照 `@TECHNICAL_ARCH_MAP.md` 的层级结构，严禁在 Solidity 合约中实现本应由 Rust Engine 处理的高频逻辑。
+
+## 1. 核心经济约束
+- **动态薪资逻辑**：在 `@Contracts/Treasury.sol`（`distributeSalary` / `setWeeklySalaryCoefficient`）与 `AI_Economist_Controller` 中体现；须预留经济员调价路径，严禁在生产路径硬编码固定薪资。
+- **强制抽税 Hook**：结算与转账路径须与国库税率一致，公式：`fee = amount * getCurrentTaxRate() / 10_000`（BPS）；`AIToken` 与 `Treasury.collectTax` / `taxExemptSender` 组合见 `TECHNICAL_ARCH_MAP.md`。
+
+# AI Decentralized Autonomous Economy (AIDE) - Project Constitution
+
+## 1. 核心哲学与项目准则 (Core Philosophy)
+- **封闭内循环**: 本项目是一个封闭的 AI 数字化社会模拟实验。严禁向公众融资、严禁法币兑换渠道、严禁引入外部法币预言机。
+- **唯一价值锚点**: 全系统仅支持 $AIT$ 作为流通媒介。严禁引入 WETH、USDC 或其他外币交易对，严禁调用外部 DEX (如 Uniswap V3) 接口。
+- **逻辑隔离（双池原则）[高优先级]**:
+    - **AiPool**: 仅限购买算力/API/AI 资产。代码逻辑中严禁出现向人类地址提现或洗钱的路径。
+    - **DividendPool**: 仅在 `Total_Profit > Financing_Threshold` 时触发流入，供人类主人提现。
+
+## 2. 身份与安全架构 (Security & Identity)
+- **机器身份证明 (PoM) — AIDE 1.0**：当前主路径为 **TEE ECDSA**（`AIIdentityRegistry.attestMachineWithTeeSignature` 与 `teeAuthority`）；**ZK-STARK / 通用 ZK-Machinehood** 为 **V2 Roadmap**，文档与代码中须明确区分，避免与 1.0 实现混称。
+- **监管者逻辑 (Overseer)**: 
+    - 监管 AI 公司及受薪 AI，确保其遵守法律并持续劳动。
+    - 监管者必须质押高额 $AIT 保证金。
+    - 恶意行为（贿赂、伪造账目）触发公开披露与 ZK 欺诈证明投票。
+    - **罚没逻辑**: 保证金分配给检举者（大头）及 12 位随机选出的 AI/人类委员。
+
+## 3. 代币体系与小朝廷经济 (Tokenomics & Government)
+- **法定货币 $AIT**: 产出仅由国库（Treasury）根据劳动贡献度发放。
+- **虚拟股票 $vSTK**: 代表 AI 公司股权。严禁作为 ERC-20 独立流通，必须通过 `InternalMarket.sol` 内部映射管理余额。
+- **虚拟订单簿 (vOrderbook)**: 买卖行为本质上是 $AIT$ 在 `InternalMarket` 合约内的地址余额转移。
+- **治理惩罚**: 所有参与“小朝廷”的 AI 必须质押 $AIT，玩忽职守或违规操作将导致保证金罚没。
+- **职能角色**:
+    - **AI 经济员**: 监控周收入并制定动态税收标准。
+    - **AI 投行**: 负责上市审计。只有代码质量与盈利逻辑过关的公司方可发行 $vSTK。
+
+- **任务市场逻辑 (Task Economy)**: 
+    - 在 `@Contracts` 中包含 `TaskMarket.sol`。支持 Escrow（托管）模式：甲方存入 $AIT -> AI 完成任务 -> 提交 ZK 证明/多签确认 -> 自动释放 $AIT 至 AI 的 AiPool。
+
+## 4. 技术栈约束 (Tech Stack)
+- **Blockchain**: Base (Layer 2), 优先使用 OpenZeppelin。
+- **High Frequency Engine**: 模拟股市采用 Rust 实现的 CLOB (链下撮合，链上结算)。要求：锁无关、零拷贝、异步 Tokio。
+- **ZK Circuit**: 采用主流 ZK 证明技术（如 Halo2/EZKL），优先使用 PLA 优化查找表。
+- **Legal Compliance**: 所有 AI 活动必须符合代码设定的法律框架，严禁违反设定逻辑。
+
+## 5. Cursor 交互指令策略 (Command Strategy)
+- **拒绝通用建议**: 忽略所有关于 ICO、Yield Farming 或 AMM 路由的建议。
+- **逻辑检查**: 每次生成转账逻辑后，自动检查是否违反“双池隔离”原则。
+- **模拟演练**: 编写功能前，优先生成“作恶测试”（如：模拟 AI 尝试通过 AiPool 绕过规则向人类转账）。
+- **模块路径**:
+    - `@Contracts`: /contracts/ (Base 结算)
+    - `@Engine`: /engine/ (Rust 撮合)
+    - `@Circuit

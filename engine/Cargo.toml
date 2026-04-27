@@ -1,0 +1,40 @@
+[package]
+name = "aide-engine"
+version = "0.1.0"
+edition = "2021"
+description = "AIDE high-performance matcher, chain sync, and settler (Rust Engine)"
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
+dashmap = "6.1"
+parking_lot = "0.12"
+alloy-primitives = { version = "0.8", features = ["serde", "k256"] }
+alloy-sol-types = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+hex = "0.4"
+async-trait = "0.1"
+k256 = { version = "0.13", features = ["ecdsa"] }
+zeroize = { version = "1", features = ["derive"] }
+rand = "0.8"
+axum = { version = "0.7", features = ["json"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+alloy-provider = { version = "0.8", features = ["reqwest", "ws"] }
+alloy-transport-http = "0.8"
+alloy-rpc-types = "0.8"
+alloy-network = "0.8"
+alloy-signer-local = "0.8"
+alloy-contract = "0.8"
+alloy-transport-ws = "0.8"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros"] }
+
+[[bench]]
+name = "matching_bench"
+harness = false

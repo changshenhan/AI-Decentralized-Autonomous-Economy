@@ -1,0 +1,29 @@
+{
+  "name": "ai-001",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "mainnet:check": "hardhat run scripts/audit_pipeline.ts",
+    "showcase": "hardhat run scripts/final_showcase.ts",
+    "deploy:sepolia": "hardhat run scripts/deploy_final.ts --network baseSepolia",
+    "preflight": "hardhat run scripts/preflight_inventory.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0 <23.0.0"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/edr-darwin-arm64": "^0.12.0-next.23",
+    "@nomicfoundation/hardhat-toolbox": "^6.1.2",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@types/node": "^25.5.0",
+    "hardhat": "^2.28.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}
